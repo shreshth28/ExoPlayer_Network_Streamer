@@ -43,12 +43,14 @@ public class VideoPlayerFragment extends Fragment{
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.fragment_video_player, container, false);
+        if(savedInstanceState==null) {
 
-        View rootView = inflater.inflate(R.layout.fragment_video_player,container,false);
-        mPlayerView=(SimpleExoPlayerView) rootView.findViewById(R.id.fragment_player);
-        noPlayerIV=rootView.findViewById(R.id.noVideo_iv);
-        String url=MainActivity.mainList.get(RecipeListFragment.indexSteps).getVideoURL().get(videoIndex);
-        initializePlayer(Uri.parse(url));
+            mPlayerView = (SimpleExoPlayerView) rootView.findViewById(R.id.fragment_player);
+            noPlayerIV = rootView.findViewById(R.id.noVideo_iv);
+            String url = MainActivity.mainList.get(RecipeListFragment.indexSteps).getVideoURL().get(videoIndex);
+            initializePlayer(Uri.parse(url));
+        }
         return rootView;
     }
 
