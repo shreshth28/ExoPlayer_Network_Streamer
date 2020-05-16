@@ -1,12 +1,8 @@
 package com.example.masterflow;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
-
 import android.os.Bundle;
-import android.widget.Toast;
 
-import java.io.Serializable;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class SelectRecipeListActivity extends AppCompatActivity{
 
@@ -15,7 +11,8 @@ public class SelectRecipeListActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_recipe_list);
-
+        int index=getIntent().getIntExtra("index",0);
+        RecipeListFragment.indexSteps=index;
     }
 
 }

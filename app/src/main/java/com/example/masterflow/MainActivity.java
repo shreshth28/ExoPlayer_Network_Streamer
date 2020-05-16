@@ -1,13 +1,13 @@
 package com.example.masterflow;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.content.Intent;
-import android.os.Bundle;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -49,7 +49,8 @@ public class MainActivity extends AppCompatActivity implements ItemAdapter.OnFoo
 
     @Override
     public void onItemClick(int index) {
-        Intent newIntent=new Intent(MainActivity.this, SelectRecipeListActivity.class);
+        Intent newIntent=new Intent(MainActivity.this,SelectRecipeListActivity.class);
+        newIntent.putExtra("index",index);
         startActivity(newIntent);
     }
 }
