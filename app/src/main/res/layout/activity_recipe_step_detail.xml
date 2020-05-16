@@ -9,7 +9,8 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:id="@+id/video_player"></FrameLayout>
+        android:id="@+id/video_player">
+    </FrameLayout>
 
     <FrameLayout
         android:layout_width="match_parent"

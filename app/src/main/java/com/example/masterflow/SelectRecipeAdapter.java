@@ -15,11 +15,12 @@ public class SelectRecipeAdapter extends RecyclerView.Adapter<SelectRecipeAdapte
 
     Context mContext;
     List<String> mMylist;
-    RecipeClickListener myRecipeClickListener;
+    RecipeClickListener listener;
 
-    public SelectRecipeAdapter(Context mContext, List<String> mMylist) {
+    public SelectRecipeAdapter(Context mContext, List<String> mMylist,RecipeClickListener listener) {
         this.mContext = mContext;
         this.mMylist = mMylist;
+        this.listener=listener;
     }
 
     interface RecipeClickListener{
@@ -61,7 +62,7 @@ public class SelectRecipeAdapter extends RecyclerView.Adapter<SelectRecipeAdapte
         @Override
         public void onClick(View v) {
             int clickedIndex=getAdapterPosition();
-            myRecipeClickListener.onRecipeClickListener(clickedIndex);
+            listener.onRecipeClickListener(clickedIndex);
         }
     }
     public void setData(List localList)

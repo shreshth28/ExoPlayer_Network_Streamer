@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,8 +16,6 @@ import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.LoadControl;
-import com.google.android.exoplayer2.RenderersFactory;
-import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
@@ -29,6 +29,10 @@ public class VideoPlayerFragment extends Fragment{
 
     SimpleExoPlayerView mPlayerView;
     ExoPlayer mExoPlayer;
+    ImageView noPlayerIV;
+    static int videoIndex;
+    boolean isAvailable;
+
 
     public VideoPlayerFragment()
     {
@@ -42,7 +46,8 @@ public class VideoPlayerFragment extends Fragment{
 
         View rootView = inflater.inflate(R.layout.fragment_video_player,container,false);
         mPlayerView=(SimpleExoPlayerView) rootView.findViewById(R.id.fragment_player);
-        String url=MainActivity.mainList.get(0).getVideoURL().get(0);
+        noPlayerIV=rootView.findViewById(R.id.noVideo_iv);
+        String url=MainActivity.mainList.get(RecipeListFragment.indexSteps).getVideoURL().get(videoIndex);
         initializePlayer(Uri.parse(url));
         return rootView;
     }
@@ -50,27 +55,41 @@ public class VideoPlayerFragment extends Fragment{
 
     private void initializePlayer(Uri mediaUri)
     {
-        TrackSelector trackSelector=new DefaultTrackSelector();
-        LoadControl loadControl=new DefaultLoadControl();
-        mExoPlayer= ExoPlayerFactory.newSimpleInstance(getContext(),trackSelector,loadControl);
-        mPlayerView.setPlayer(mExoPlayer);
-        String userAgent= Util.getUserAgent(getContext(),"BakingApp");
-        MediaSource mediaSource=new ExtractorMediaSource(mediaUri,new DefaultDataSourceFactory(getContext(),userAgent),new DefaultExtractorsFactory(),null,null);
-        mExoPlayer.prepare(mediaSource);
-        mExoPlayer.setPlayWhenReady(true);
+        if(mediaUri.toString().equals("")) {
+            noPlayerIV.setVisibility(View.VISIBLE);
+            isAvailable=false;
+            mPlayerView.setVisibility(View.GONE);
+            Toast.makeText(getActivity(),"No Video Available", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            noPlayerIV.setVisibility(View.GONE);
+            mPlayerView.setVisibility(View.VISIBLE);
+            isAvailable=true;
+            TrackSelector trackSelector = new DefaultTrackSelector();
+            LoadControl loadControl = new DefaultLoadControl();
+            mExoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector, loadControl);
+            mPlayerView.setPlayer(mExoPlayer);
+            String userAgent = Util.getUserAgent(getContext(), "BakingApp");
+            MediaSource mediaSource = new ExtractorMediaSource(mediaUri, new DefaultDataSourceFactory(getContext(), userAgent), new DefaultExtractorsFactory(), null, null);
+            mExoPlayer.prepare(mediaSource);
+            mExoPlayer.setPlayWhenReady(true);
+        }
+    }
+
+    public void releasePlayer()
+    {
+        if(isAvailable) {
+            mExoPlayer.stop();
+            mExoPlayer.release();
+            mExoPlayer = null;
+        }
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onPause() {
+        super.onPause();
         releasePlayer();
+    }
 
-    }
-    public void releasePlayer()
-    {
-        mExoPlayer.stop();
-        mExoPlayer.release();
-        mExoPlayer=null;
-    }
 
 }

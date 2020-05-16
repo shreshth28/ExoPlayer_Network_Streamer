@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <ImageView
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/novideo"
+        android:id="@+id/noVideo_iv"></ImageView>
 <com.google.android.exoplayer2.ui.SimpleExoPlayerView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/fragment_player"
     android:layout_width="match_parent" android:layout_height="match_parent">
 </com.google.android.exoplayer2.ui.SimpleExoPlayerView>
+</FrameLayout>
