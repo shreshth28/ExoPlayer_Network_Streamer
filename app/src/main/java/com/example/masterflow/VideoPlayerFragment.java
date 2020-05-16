@@ -34,23 +34,16 @@ public class VideoPlayerFragment extends Fragment{
     boolean isAvailable;
 
 
-    public VideoPlayerFragment()
-    {
-
-    }
-
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_video_player, container, false);
-        if(savedInstanceState==null) {
-
             mPlayerView = (SimpleExoPlayerView) rootView.findViewById(R.id.fragment_player);
             noPlayerIV = rootView.findViewById(R.id.noVideo_iv);
             String url = MainActivity.mainList.get(RecipeListFragment.indexSteps).getVideoURL().get(videoIndex);
+        Toast.makeText(getContext(), "OnCreateView Called", Toast.LENGTH_SHORT).show();
             initializePlayer(Uri.parse(url));
-        }
         return rootView;
     }
 
@@ -64,6 +57,7 @@ public class VideoPlayerFragment extends Fragment{
             Toast.makeText(getActivity(),"No Video Available", Toast.LENGTH_SHORT).show();
         }
         else {
+            Toast.makeText(getActivity(),mediaUri.toString(), Toast.LENGTH_SHORT).show();
             noPlayerIV.setVisibility(View.GONE);
             mPlayerView.setVisibility(View.VISIBLE);
             isAvailable=true;

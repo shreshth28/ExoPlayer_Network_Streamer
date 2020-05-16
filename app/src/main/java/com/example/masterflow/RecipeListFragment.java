@@ -1,5 +1,6 @@
 package com.example.masterflow;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -20,7 +21,11 @@ public class RecipeListFragment extends Fragment implements SelectRecipeAdapter.
     RecyclerView recyclerView;
     static int indexSteps;
     RecyclerView ingredientRv;
+    Callback mCallback;
 
+    interface Callback{
+        void callbacklistener(int index);
+    }
 
     @Nullable
     @Override
@@ -43,17 +48,34 @@ public class RecipeListFragment extends Fragment implements SelectRecipeAdapter.
         ingredientRv.setAdapter(selectIngredientAdapter);
         SelectRecipeAdapter mAdapter=new SelectRecipeAdapter(getActivity(),myCustomItem.getShortDesciprtion(),this);
         recyclerView.setAdapter(mAdapter);
-
-
-
-
         return rv;
+    }
+
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        // This makes sure that the host activity has implemented the callback interface
+        // If not, it throws an exception
+        try {
+            mCallback = (Callback) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement RecipeClickListener Interface");
+        }
     }
 
     @Override
     public void onRecipeClickListener(int index) {
-        Intent detailActivity=new Intent(getActivity(),RecipeStepDetailActivity.class);
-        detailActivity.putExtra("index",index);
-        startActivity(detailActivity);
+        if(!MainActivity.isTablet) {
+            Intent detailActivity = new Intent(getActivity(), RecipeStepDetailActivity.class);
+            detailActivity.putExtra("index", index);
+            startActivity(detailActivity);
+        }
+        else{
+            mCallback.callbacklistener(index);
+        }
+
     }
 }
