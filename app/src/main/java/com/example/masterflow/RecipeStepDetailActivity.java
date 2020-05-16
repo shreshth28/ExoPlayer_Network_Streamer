@@ -17,7 +17,7 @@ public class RecipeStepDetailActivity extends AppCompatActivity{
             detailInstructions = findViewById(R.id.detail_instruction);
             VideoPlayerFragment videoPlayerFragment = new VideoPlayerFragment();
             FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction().add(R.id.video_player, videoPlayerFragment)
+            fragmentManager.beginTransaction().replace(R.id.video_player, videoPlayerFragment)
                     .commit();
             VideoPlayerFragment.videoIndex = getIntent().getIntExtra("index", 0);
             detailInstructions.setText(MainActivity.mainList.get(RecipeListFragment.indexSteps).getDescription().get(VideoPlayerFragment.videoIndex));

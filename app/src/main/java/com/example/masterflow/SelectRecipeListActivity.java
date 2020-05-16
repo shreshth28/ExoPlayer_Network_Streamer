@@ -20,7 +20,7 @@ public class SelectRecipeListActivity extends AppCompatActivity implements Recip
     public void callbacklistener(int index) {
             VideoPlayerFragment videoPlayerFragment = new VideoPlayerFragment();
             FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction().add(R.id.video_player, videoPlayerFragment)
+            fragmentManager.beginTransaction().replace(R.id.video_player, videoPlayerFragment)
                     .commit();
             VideoPlayerFragment.videoIndex = index;
     }

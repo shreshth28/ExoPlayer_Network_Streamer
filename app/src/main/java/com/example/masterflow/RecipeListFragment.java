@@ -56,8 +56,6 @@ public class RecipeListFragment extends Fragment implements SelectRecipeAdapter.
     public void onAttach(Context context) {
         super.onAttach(context);
 
-        // This makes sure that the host activity has implemented the callback interface
-        // If not, it throws an exception
         try {
             mCallback = (Callback) context;
         } catch (ClassCastException e) {

@@ -42,7 +42,7 @@ public class VideoPlayerFragment extends Fragment{
             mPlayerView = (SimpleExoPlayerView) rootView.findViewById(R.id.fragment_player);
             noPlayerIV = rootView.findViewById(R.id.noVideo_iv);
             String url = MainActivity.mainList.get(RecipeListFragment.indexSteps).getVideoURL().get(videoIndex);
-        Toast.makeText(getContext(), "OnCreateView Called", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "OnCreateView Called", Toast.LENGTH_SHORT).show();
             initializePlayer(Uri.parse(url));
         return rootView;
     }
@@ -57,16 +57,15 @@ public class VideoPlayerFragment extends Fragment{
             Toast.makeText(getActivity(),"No Video Available", Toast.LENGTH_SHORT).show();
         }
         else {
-            Toast.makeText(getActivity(),mediaUri.toString(), Toast.LENGTH_SHORT).show();
             noPlayerIV.setVisibility(View.GONE);
             mPlayerView.setVisibility(View.VISIBLE);
             isAvailable=true;
             TrackSelector trackSelector = new DefaultTrackSelector();
             LoadControl loadControl = new DefaultLoadControl();
-            mExoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector, loadControl);
+            mExoPlayer = ExoPlayerFactory.newSimpleInstance(getActivity(), trackSelector, loadControl);
             mPlayerView.setPlayer(mExoPlayer);
-            String userAgent = Util.getUserAgent(getContext(), "BakingApp");
-            MediaSource mediaSource = new ExtractorMediaSource(mediaUri, new DefaultDataSourceFactory(getContext(), userAgent), new DefaultExtractorsFactory(), null, null);
+            String userAgent = Util.getUserAgent(getActivity(), "BakingApp");
+            MediaSource mediaSource = new ExtractorMediaSource(mediaUri, new DefaultDataSourceFactory(getActivity(), userAgent), new DefaultExtractorsFactory(), null, null);
             mExoPlayer.prepare(mediaSource);
             mExoPlayer.setPlayWhenReady(true);
         }
