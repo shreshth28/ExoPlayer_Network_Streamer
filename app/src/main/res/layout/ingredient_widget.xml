@@ -4,10 +4,31 @@
     android:layout_height="match_parent">
 
     <Button
-        android:id="@+id/ingredient_btn"
-        android:layout_width="wrap_content"
+        android:id="@+id/ingredient_widget_btn"
+        android:layout_width="match_parent"
+        android:background="#000000"
+        android:textColor="#ffffff"
+        android:fontFamily="monospace"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Press Me"></Button>
+        android:text="Open App"></Button>
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ListView
+            android:id="@+id/ingredient_widget_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </ListView>
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/ingredient_widget_empty_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:textColor="#ffffff"
+            android:textStyle="bold"></TextView>
+    </FrameLayout>
 </LinearLayout>
