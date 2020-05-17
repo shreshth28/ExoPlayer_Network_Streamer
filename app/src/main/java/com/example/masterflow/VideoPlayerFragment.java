@@ -5,7 +5,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -28,11 +30,13 @@ import com.google.android.exoplayer2.util.Util;
 public class VideoPlayerFragment extends Fragment{
 
     SimpleExoPlayerView mPlayerView;
-    ExoPlayer mExoPlayer;
-    ImageView noPlayerIV;
+    static ExoPlayer mExoPlayer;
+    static ImageView noPlayerIV;
     static int videoIndex;
-    boolean isAvailable;
-
+    static boolean isAvailable;
+    Button nextBtn;
+    Button prevBtn;
+    TextView detailInstructions;
 
 
     @Nullable
@@ -41,15 +45,41 @@ public class VideoPlayerFragment extends Fragment{
         View rootView = inflater.inflate(R.layout.fragment_video_player, container, false);
             mPlayerView = (SimpleExoPlayerView) rootView.findViewById(R.id.fragment_player);
             noPlayerIV = rootView.findViewById(R.id.noVideo_iv);
-            String url = MainActivity.mainList.get(RecipeListFragment.indexSteps).getVideoURL().get(videoIndex);
-            Toast.makeText(getContext(), "OnCreateView Called", Toast.LENGTH_SHORT).show();
-            initializePlayer(Uri.parse(url));
+            initializePlayer(videoIndex);
+            nextBtn=getActivity().findViewById(R.id.next_btn);
+            prevBtn=getActivity().findViewById(R.id.prev_btn);
+            nextBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(VideoPlayerFragment.videoIndex<MainActivity.mainList.get(RecipeListFragment.indexSteps).getStepsLength()-1) {
+                        ++VideoPlayerFragment.videoIndex;
+                        releasePlayer();
+                        initializePlayer(videoIndex);
+                    }
+                }
+            });
+
+            prevBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(VideoPlayerFragment.videoIndex>0)
+                    {
+
+                        --VideoPlayerFragment.videoIndex;
+                        releasePlayer();
+                        initializePlayer(videoIndex);
+                    }
+                }
+            });
         return rootView;
     }
 
 
-    private void initializePlayer(Uri mediaUri)
+    private void initializePlayer(int index)
     {
+        executeDisplay();
+        String url = MainActivity.mainList.get(RecipeListFragment.indexSteps).getVideoURL().get(index);
+        Uri mediaUri=(Uri.parse(url));
         if(mediaUri.toString().equals("")) {
             noPlayerIV.setVisibility(View.VISIBLE);
             isAvailable=false;
@@ -71,7 +101,7 @@ public class VideoPlayerFragment extends Fragment{
         }
     }
 
-    public void releasePlayer()
+    public static void releasePlayer()
     {
         if(isAvailable) {
             mExoPlayer.stop();
@@ -79,6 +109,12 @@ public class VideoPlayerFragment extends Fragment{
             mExoPlayer = null;
         }
     }
+
+    public void executeDisplay(){
+        detailInstructions = getActivity().findViewById(R.id.detail_instruction);
+        detailInstructions.setText(MainActivity.mainList.get(RecipeListFragment.indexSteps).getDescription().get(VideoPlayerFragment.videoIndex));
+    }
+
 
     @Override
     public void onPause() {
