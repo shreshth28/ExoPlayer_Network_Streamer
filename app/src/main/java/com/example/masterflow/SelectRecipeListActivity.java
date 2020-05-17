@@ -14,6 +14,13 @@ public class SelectRecipeListActivity extends AppCompatActivity implements Recip
         setContentView(R.layout.activity_select_recipe_list);
         int index=getIntent().getIntExtra("index",0);
         RecipeListFragment.indexSteps=index;
+//        Intent intent=new Intent(this,IngredientAppWidgetProvider.class);
+//        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+//        int [] ids=AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(new ComponentName(getApplication(),IngredientAppWidgetProvider.class));
+//        if(ids!=null) {
+//            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, ids);
+//            sendBroadcast(intent);
+//        }
     }
 
     @Override

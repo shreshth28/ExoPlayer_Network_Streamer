@@ -36,6 +36,7 @@ public class IngredientWidgetService extends RemoteViewsService {
         @Override
         public void onDataSetChanged() {
             //close data source
+            dataList=MainActivity.mainList.get(RecipeListFragment.indexSteps).getIngredient();
         }
 
         @Override
@@ -52,6 +53,11 @@ public class IngredientWidgetService extends RemoteViewsService {
         public RemoteViews getViewAt(int position) {
             RemoteViews views=new RemoteViews(context.getPackageName(),R.layout.ingredient_widget_item);
             views.setTextViewText(R.id.ingredient_widget_item_text,dataList.get(position));
+
+            Intent fillIntent= new Intent();
+            fillIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,appWidgetId);
+            views.setOnClickFillInIntent(R.id.ingredient_widget_item_text,fillIntent);
+
             return views;
         }
 
