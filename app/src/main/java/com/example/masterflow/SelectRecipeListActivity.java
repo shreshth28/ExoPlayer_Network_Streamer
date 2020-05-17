@@ -1,5 +1,8 @@
 package com.example.masterflow;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,13 +17,18 @@ public class SelectRecipeListActivity extends AppCompatActivity implements Recip
         setContentView(R.layout.activity_select_recipe_list);
         int index=getIntent().getIntExtra("index",0);
         RecipeListFragment.indexSteps=index;
-//        Intent intent=new Intent(this,IngredientAppWidgetProvider.class);
-//        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-//        int [] ids=AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(new ComponentName(getApplication(),IngredientAppWidgetProvider.class));
-//        if(ids!=null) {
-//            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, ids);
-//            sendBroadcast(intent);
-//        }
+        Context context = getApplicationContext();
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+        ComponentName thisWidget = new ComponentName(context, IngredientAppWidgetProvider.class);
+        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(thisWidget);
+        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.ingredient_widget_list_view);
+
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     @Override

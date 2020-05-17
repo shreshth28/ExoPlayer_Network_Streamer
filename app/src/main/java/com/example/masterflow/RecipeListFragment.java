@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,6 +23,9 @@ public class RecipeListFragment extends Fragment implements SelectRecipeAdapter.
     static int indexSteps;
     RecyclerView ingredientRv;
     Callback mCallback;
+    View rv;
+
+
 
     interface Callback{
         void callbacklistener(int index);
@@ -30,11 +34,19 @@ public class RecipeListFragment extends Fragment implements SelectRecipeAdapter.
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rv=inflater.inflate(R.layout.fragment_master_list,container,false);
+        Toast.makeText(getActivity(), "Entered onCreate", Toast.LENGTH_SHORT).show();
+        rv=inflater.inflate(R.layout.fragment_master_list,container,false);
+        return rv;
+    }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
         List<Ingredient> list=new ArrayList<>();
         recyclerView=rv.findViewById(R.id.recipe_list_rv);
         ingredientRv=rv.findViewById(R.id.ingredients_list_rv);
-        LinearLayoutManager ingLayoutManager=new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, true);
+        LinearLayoutManager ingLayoutManager=new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         LinearLayoutManager layoutManager=new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         ingredientRv.setLayoutManager(ingLayoutManager);
@@ -44,13 +56,11 @@ public class RecipeListFragment extends Fragment implements SelectRecipeAdapter.
         {
             list.add(new Ingredient(myCustomItem.getIngredient().get(y),myCustomItem.getQuantity().get(y),myCustomItem.getMeasure().get(y)));
         }
-        SelectIngredientAdapter selectIngredientAdapter=new SelectIngredientAdapter(getActivity(),list);
+        SelectIngredientAdapter selectIngredientAdapter=new SelectIngredientAdapter(getContext(),list);
         ingredientRv.setAdapter(selectIngredientAdapter);
-        SelectRecipeAdapter mAdapter=new SelectRecipeAdapter(getActivity(),myCustomItem.getShortDesciprtion(),this);
+        SelectRecipeAdapter mAdapter=new SelectRecipeAdapter(getContext(),myCustomItem.getShortDesciprtion(),this);
         recyclerView.setAdapter(mAdapter);
-        return rv;
     }
-
 
     @Override
     public void onAttach(Context context) {
@@ -67,7 +77,7 @@ public class RecipeListFragment extends Fragment implements SelectRecipeAdapter.
     @Override
     public void onRecipeClickListener(int index) {
         if(!MainActivity.isTablet) {
-            Intent detailActivity = new Intent(getActivity(), RecipeStepDetailActivity.class);
+            Intent detailActivity = new Intent(getContext(), RecipeStepDetailActivity.class);
             detailActivity.putExtra("index", index);
             startActivity(detailActivity);
         }
@@ -75,5 +85,10 @@ public class RecipeListFragment extends Fragment implements SelectRecipeAdapter.
             mCallback.callbacklistener(index);
         }
 
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
     }
 }

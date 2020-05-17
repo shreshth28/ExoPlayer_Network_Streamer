@@ -19,7 +19,7 @@ public class IngredientWidgetService extends RemoteViewsService {
 
         private Context context;
         private int appWidgetId;
-        private List<String> dataList=MainActivity.mainList.get(RecipeListFragment.indexSteps).getIngredient();
+        private List<String> dataList;
 
         IngredientWidgetItemFactory(Context context,Intent intent)
         {
@@ -56,7 +56,6 @@ public class IngredientWidgetService extends RemoteViewsService {
 
             Intent fillIntent= new Intent();
             fillIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,appWidgetId);
-            views.setOnClickFillInIntent(R.id.ingredient_widget_item_text,fillIntent);
 
             return views;
         }

@@ -14,7 +14,7 @@ import java.util.List;
 public class SelectIngredientAdapter extends RecyclerView.Adapter<SelectIngredientAdapter.SelectIngredientViewHolder> {
 
     private Context context;
-    private List<Ingredient> ingredients;
+    public List<Ingredient> ingredients;
 
     public SelectIngredientAdapter(Context context, List<Ingredient> ingredients) {
         this.context = context;

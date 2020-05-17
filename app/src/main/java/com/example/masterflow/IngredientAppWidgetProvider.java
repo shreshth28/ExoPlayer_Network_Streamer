@@ -40,7 +40,6 @@ public class IngredientAppWidgetProvider extends AppWidgetProvider {
             views.setEmptyView(R.id.ingredient_widget_list_view,R.id.ingredient_widget_empty_view);
             views.setPendingIntentTemplate(R.id.ingredient_widget_list_view,clickPendingIntent);
 
-//            Bundle appWidgetOptions=appWidgetManager.getAppWidgetOptions(appWidgetId);
             views.setViewVisibility(R.id.ingredient_widget_btn, View.VISIBLE);
             appWidgetManager.updateAppWidget(appWidgetId,views);
             appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId,R.id.ingredient_widget_list_view);

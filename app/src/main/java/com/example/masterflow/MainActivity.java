@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements ItemAdapter.OnFoo
 
         ItemAdapter adapter=new ItemAdapter(this,mainList);
         foodListRv.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
 
     }
 

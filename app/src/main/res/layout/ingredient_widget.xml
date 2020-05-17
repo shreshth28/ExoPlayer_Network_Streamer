@@ -11,7 +11,7 @@
         android:fontFamily="monospace"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Open App"></Button>
+        android:text="YOUR LIST"></Button>
 
     <FrameLayout
         android:layout_width="match_parent"
