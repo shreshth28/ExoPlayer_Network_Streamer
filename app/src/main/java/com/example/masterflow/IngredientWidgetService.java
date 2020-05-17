@@ -3,9 +3,11 @@ package com.example.masterflow;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -19,7 +21,7 @@ public class IngredientWidgetService extends RemoteViewsService {
 
         private Context context;
         private int appWidgetId;
-        private List<String> dataList;
+        private List<String> dataList= new ArrayList<>();
 
         IngredientWidgetItemFactory(Context context,Intent intent)
         {
@@ -31,12 +33,20 @@ public class IngredientWidgetService extends RemoteViewsService {
         @Override
         public void onCreate() {
             //connect to database
+            Log.d(IngredientWidgetService.class.getSimpleName(),"Data Changed");
         }
 
         @Override
         public void onDataSetChanged() {
             //close data source
-            dataList=MainActivity.mainList.get(RecipeListFragment.indexSteps).getIngredient();
+            if(MainActivity.mainList==null)
+            {
+                dataList.add("Select An Item In App to display");
+            }
+            else {
+                dataList = MainActivity.mainList.get(RecipeListFragment.indexSteps).getIngredient();
+            }
+            Log.d(IngredientWidgetService.class.getSimpleName(),"Data Changed");
         }
 
         @Override
@@ -56,7 +66,7 @@ public class IngredientWidgetService extends RemoteViewsService {
 
             Intent fillIntent= new Intent();
             fillIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,appWidgetId);
-
+            views.setOnClickFillInIntent(R.id.ingredient_widget_btn,fillIntent);
             return views;
         }
 
