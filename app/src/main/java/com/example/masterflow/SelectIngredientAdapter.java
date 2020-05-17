@@ -11,6 +11,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class SelectIngredientAdapter extends RecyclerView.Adapter<SelectIngredientAdapter.SelectIngredientViewHolder> {
 
     private Context context;
@@ -41,14 +44,12 @@ public class SelectIngredientAdapter extends RecyclerView.Adapter<SelectIngredie
     }
 
     public class SelectIngredientViewHolder extends RecyclerView.ViewHolder {
-        TextView quantity;
-        TextView ingredient;
-        TextView measure;
+        @BindView(R.id.quantity) TextView quantity;
+        @BindView(R.id.ingredient)TextView ingredient;
+        @BindView(R.id.measure) TextView measure;
         public SelectIngredientViewHolder(@NonNull View itemView) {
             super(itemView);
-            quantity=itemView.findViewById(R.id.quantity);
-            ingredient=itemView.findViewById(R.id.ingredient);
-            measure=itemView.findViewById(R.id.measure);
+            ButterKnife.bind(this,itemView);
         }
     }
 }

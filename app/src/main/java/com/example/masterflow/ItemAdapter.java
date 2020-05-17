@@ -9,8 +9,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.io.Serializable;
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder>{
 
@@ -50,11 +52,11 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
 
     public class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        TextView foodItemTV;
+        @BindView(R.id.food_item) TextView foodItemTV;
 
         public ItemViewHolder(@NonNull View itemView) {
             super(itemView);
-            foodItemTV=itemView.findViewById(R.id.food_item);
+            ButterKnife.bind(this,itemView);
             itemView.setOnClickListener(this);
         }
 

@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -34,7 +33,7 @@ public class RecipeListFragment extends Fragment implements SelectRecipeAdapter.
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Toast.makeText(getActivity(), "Entered onCreate", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getActivity(), "Entered onCreate", Toast.LENGTH_SHORT).show();
         rv=inflater.inflate(R.layout.fragment_master_list,container,false);
         return rv;
     }

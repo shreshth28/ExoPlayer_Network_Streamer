@@ -11,6 +11,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class SelectRecipeAdapter extends RecyclerView.Adapter<SelectRecipeAdapter.SelectRecipeViewHolder> {
 
     Context mContext;
@@ -51,11 +54,11 @@ public class SelectRecipeAdapter extends RecyclerView.Adapter<SelectRecipeAdapte
 
     public class SelectRecipeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        TextView stepTV;
+        @BindView(R.id.steps_textView)TextView stepTV;
 
         public SelectRecipeViewHolder(@NonNull View itemView) {
             super(itemView);
-            stepTV=itemView.findViewById(R.id.steps_textView);
+            ButterKnife.bind(this,itemView);
             itemView.setOnClickListener(this);
         }
 
