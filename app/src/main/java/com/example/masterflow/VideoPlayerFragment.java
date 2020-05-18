@@ -72,7 +72,7 @@ public class VideoPlayerFragment extends Fragment{
                     SharedPreferences prefs = getActivity().getSharedPreferences(MY_PREFS_NAME, Context.MODE_MULTI_PROCESS);
                     videoIndex = prefs.getInt("videoIndex", 0);
                     position = savedInstanceState.getLong("position", 0);
-                    Toast.makeText(getContext(), position + "", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getContext(), position + "", Toast.LENGTH_SHORT).show();
                     TrackSelector trackSelector = new DefaultTrackSelector();
                     LoadControl loadControl = new DefaultLoadControl();
                     mExoPlayer = ExoPlayerFactory.newSimpleInstance(getActivity(), trackSelector, loadControl);
