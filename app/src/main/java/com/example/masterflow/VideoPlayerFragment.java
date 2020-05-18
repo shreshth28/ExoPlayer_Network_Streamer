@@ -28,6 +28,7 @@ import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
+import com.squareup.picasso.Picasso;
 
 public class VideoPlayerFragment extends Fragment{
 
@@ -36,6 +37,7 @@ public class VideoPlayerFragment extends Fragment{
     static ImageView noPlayerIV;
     static int videoIndex;
     static boolean isAvailable;
+    static String thumbNailUrl;
     public static long position;
     Button nextBtn;
     Button prevBtn;
@@ -120,6 +122,23 @@ public class VideoPlayerFragment extends Fragment{
         String url = MainActivity.mainList.get(RecipeListFragment.indexSteps).getVideoURL().get(index);
         Uri mediaUri=(Uri.parse(url));
         if(mediaUri.toString().equals("")) {
+           thumbNailUrl=MainActivity.mainList.get(RecipeListFragment.indexSteps).getThumbnailURL().get(index);
+           try{
+            if(thumbNailUrl.substring(thumbNailUrl.length()-4).equalsIgnoreCase(".mp4")) {
+                Picasso.get().load(R.drawable.novideo).resize(50, 50)
+                        .centerCrop().into(noPlayerIV);
+            }
+            else{
+                Picasso.get()
+                        .load(thumbNailUrl)
+                        .error(R.drawable.novideo)
+                        .into(noPlayerIV);
+            }}
+           catch (Exception e)
+           {
+               Picasso.get().load(R.drawable.novideo).resize(50, 50)
+                       .centerCrop().into(noPlayerIV);
+           }
             noPlayerIV.setVisibility(View.VISIBLE);
             isAvailable=false;
             mPlayerView.setVisibility(View.GONE);
@@ -145,7 +164,9 @@ public class VideoPlayerFragment extends Fragment{
     public void onResume() {
         super.onResume();
         if(!MainActivity.isTablet) {
-            mExoPlayer.seekTo(position);
+            if(mExoPlayer!=null) {
+                mExoPlayer.seekTo(position);
+            }
         }
     }
 
@@ -182,7 +203,9 @@ public class VideoPlayerFragment extends Fragment{
     @Override
     public void onPause() {
         super.onPause();
-        position=mExoPlayer.getCurrentPosition();
+        if(mExoPlayer!=null) {
+            position = mExoPlayer.getCurrentPosition();
+        }
     }
 
 
