@@ -1,10 +1,12 @@
 package com.example.masterflow;
 
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
@@ -16,8 +18,8 @@ public class RecipeStepDetailActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_recipe_step_detail);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         nextBtn=findViewById(R.id.next_btn);
         prevBtn=findViewById(R.id.prev_btn);
         if(!MainActivity.isTablet) {
@@ -60,6 +62,15 @@ public class RecipeStepDetailActivity extends AppCompatActivity{
                 .commit();
 
         detailInstructions.setText(MainActivity.mainList.get(RecipeListFragment.indexSteps).getDescription().get(VideoPlayerFragment.videoIndex));
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if(item.getItemId()==android.R.id.home)
+        {
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
 
