@@ -75,10 +75,12 @@ public class RecipeListFragment extends Fragment implements SelectRecipeAdapter.
 
     @Override
     public void onRecipeClickListener(int index) {
+        VideoPlayerFragment.position=0;
         if(!MainActivity.isTablet) {
             Intent detailActivity = new Intent(getContext(), RecipeStepDetailActivity.class);
             detailActivity.putExtra("index", index);
             startActivity(detailActivity);
+
         }
         else{
             mCallback.callbacklistener(index);

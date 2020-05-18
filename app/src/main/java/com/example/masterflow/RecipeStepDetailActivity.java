@@ -26,6 +26,7 @@ public class RecipeStepDetailActivity extends AppCompatActivity{
             VideoPlayerFragment.videoIndex = getIntent().getIntExtra("index", 0);
             executeDisplay();
         }
+
         nextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

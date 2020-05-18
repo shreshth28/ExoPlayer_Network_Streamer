@@ -1,5 +1,7 @@
 package com.example.masterflow;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -34,27 +36,61 @@ public class VideoPlayerFragment extends Fragment{
     static ImageView noPlayerIV;
     static int videoIndex;
     static boolean isAvailable;
+    public static long position;
     Button nextBtn;
     Button prevBtn;
+    Boolean isFirstRun;
     TextView detailInstructions;
-
-
+    public static final String MY_PREFS_NAME="vp";
+    SharedPreferences.Editor editor;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_video_player, container, false);
             mPlayerView = (SimpleExoPlayerView) rootView.findViewById(R.id.fragment_player);
             noPlayerIV = rootView.findViewById(R.id.noVideo_iv);
-            initializePlayer(videoIndex);
+
+            if(savedInstanceState==null) {
+                initializePlayer(videoIndex);
+                editor=getActivity().getSharedPreferences(MY_PREFS_NAME, Context.MODE_MULTI_PROCESS).edit();
+                editor.putInt("videoIndex",videoIndex);
+                editor.apply();
+            }
+            if(savedInstanceState!=null)
+            {
+                if(MainActivity.isTablet)
+                {
+                    initializePlayer(videoIndex);
+                    SharedPreferences prefs = getActivity().getSharedPreferences(MY_PREFS_NAME, Context.MODE_MULTI_PROCESS);
+                    videoIndex = prefs.getInt("videoIndex", 0);
+                    position = savedInstanceState.getLong("position", 0);
+                    mExoPlayer.seekTo(position);
+                }
+                else {
+                    SharedPreferences prefs = getActivity().getSharedPreferences(MY_PREFS_NAME, Context.MODE_MULTI_PROCESS);
+                    videoIndex = prefs.getInt("videoIndex", 0);
+                    position = savedInstanceState.getLong("position", 0);
+                    Toast.makeText(getContext(), position + "", Toast.LENGTH_SHORT).show();
+                    TrackSelector trackSelector = new DefaultTrackSelector();
+                    LoadControl loadControl = new DefaultLoadControl();
+                    mExoPlayer = ExoPlayerFactory.newSimpleInstance(getActivity(), trackSelector, loadControl);
+                    mPlayerView.setPlayer(mExoPlayer);
+                    mExoPlayer.setPlayWhenReady(true);
+                }
+
+            }
             nextBtn=getActivity().findViewById(R.id.next_btn);
             prevBtn=getActivity().findViewById(R.id.prev_btn);
             nextBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(VideoPlayerFragment.videoIndex<MainActivity.mainList.get(RecipeListFragment.indexSteps).getStepsLength()-1) {
-                        ++VideoPlayerFragment.videoIndex;
+                    if(videoIndex<MainActivity.mainList.get(RecipeListFragment.indexSteps).getStepsLength()-1) {
+                        videoIndex=videoIndex+1;
                         releasePlayer();
                         initializePlayer(videoIndex);
+                        editor=getActivity().getSharedPreferences(MY_PREFS_NAME, Context.MODE_MULTI_PROCESS).edit();
+                        editor.putInt("videoIndex",videoIndex);
+                        editor.apply();
                     }
                 }
             });
@@ -62,12 +98,15 @@ public class VideoPlayerFragment extends Fragment{
             prevBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(VideoPlayerFragment.videoIndex>0)
+                    if(videoIndex>0)
                     {
 
-                        --VideoPlayerFragment.videoIndex;
+                        videoIndex=videoIndex-1;
                         releasePlayer();
                         initializePlayer(videoIndex);
+                        editor=getActivity().getSharedPreferences(MY_PREFS_NAME, Context.MODE_MULTI_PROCESS).edit();
+                        editor.putInt("videoIndex",videoIndex);
+                        editor.apply();
                     }
                 }
             });
@@ -98,7 +137,21 @@ public class VideoPlayerFragment extends Fragment{
             MediaSource mediaSource = new ExtractorMediaSource(mediaUri, new DefaultDataSourceFactory(getActivity(), userAgent), new DefaultExtractorsFactory(), null, null);
             mExoPlayer.prepare(mediaSource);
             mExoPlayer.setPlayWhenReady(true);
+
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(!MainActivity.isTablet) {
+            mExoPlayer.seekTo(position);
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
     }
 
     public static void releasePlayer()
@@ -106,7 +159,6 @@ public class VideoPlayerFragment extends Fragment{
         if(isAvailable) {
             mExoPlayer.stop();
             mExoPlayer.release();
-            mExoPlayer = null;
         }
     }
 
@@ -115,11 +167,22 @@ public class VideoPlayerFragment extends Fragment{
         detailInstructions.setText(MainActivity.mainList.get(RecipeListFragment.indexSteps).getDescription().get(VideoPlayerFragment.videoIndex));
     }
 
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putLong("position",position);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        releasePlayer();
+    }
 
     @Override
     public void onPause() {
         super.onPause();
-        releasePlayer();
+        position=mExoPlayer.getCurrentPosition();
     }
 
 
